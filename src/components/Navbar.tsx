@@ -3,8 +3,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import ProfilePopup from "@/components/ProfilePopup";
 
 const Navbar = () => {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    if (isProfileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileOpen]);
+
   return (
     <nav className="bg-background border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,9 +81,20 @@ const Navbar = () => {
                 className="border-none bg-transparent text-navy placeholder:text-gray focus-visible:ring-0 w-64"
               />
             </div>
-            <Button variant="ghost" size="icon" className="text-navy hover:bg-secondary">
-              <User className="h-5 w-5" />
-            </Button>
+            <div className="relative" ref={profileRef}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-navy hover:bg-secondary"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
+                <User className="h-5 w-5" />
+              </Button>
+              <ProfilePopup 
+                isOpen={isProfileOpen} 
+                onClose={() => setIsProfileOpen(false)} 
+              />
+            </div>
           </div>
         </div>
       </div>
