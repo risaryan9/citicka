@@ -2,6 +2,7 @@ import { MapPin, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -32,12 +33,16 @@ const Navbar = () => {
 
           {/* Middle Section - Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Button variant="ghost" className="text-navy font-medium hover:text-navy hover:bg-secondary">
-              Curated
-            </Button>
-            <Button variant="ghost" className="text-navy font-medium hover:text-navy hover:bg-secondary">
-              Events
-            </Button>
+            <Link to="/">
+              <Button variant="ghost" className="text-navy font-medium hover:text-navy hover:bg-secondary">
+                Curated
+              </Button>
+            </Link>
+            <Link to="/events">
+              <Button variant="ghost" className="text-navy font-medium hover:text-navy hover:bg-secondary">
+                Events
+              </Button>
+            </Link>
             <Button variant="ghost" className="text-navy font-medium hover:text-navy hover:bg-secondary">
               Movies
             </Button>
