@@ -5,10 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import ProfilePopup from "@/components/ProfilePopup";
+import LoginRegisterPopup from "./LoginRegisterPopup";
 
 const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -26,8 +28,12 @@ const Navbar = () => {
     };
   }, [isProfileOpen]);
 
+
+
+  const isLoggedIn = true; 
   return (
-    <nav className="bg-background border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
+    <>
+    <nav className="border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left Section - Logo and Location */}
@@ -82,23 +88,40 @@ const Navbar = () => {
               />
             </div>
             <div className="relative" ref={profileRef}>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-navy hover:bg-secondary"
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-              >
-                <User className="h-5 w-5" />
-              </Button>
-              <ProfilePopup 
-                isOpen={isProfileOpen} 
-                onClose={() => setIsProfileOpen(false)} 
-              />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-navy hover:bg-secondary"
+              onClick={() => {
+                if (isLoggedIn) {
+                  setIsProfileOpen(!isProfileOpen);
+                } else {
+                  setIsLoginOpen(true);
+                }
+              }}
+            >
+              <User className="h-5 w-5" />
+            </Button>
+
+              {/* Profile Dropdown (only if logged in) */}
+              {isLoggedIn && (
+                <ProfilePopup
+                  isOpen={isProfileOpen}
+                  onClose={() => setIsProfileOpen(false)}
+                />
+              )}
+
+
             </div>
           </div>
         </div>
       </div>
     </nav>
+    {/* Login/Register Popup (only if not logged in) */}
+    {!isLoggedIn && isLoginOpen && (
+      <LoginRegisterPopup     isOpen={isLoginOpen}  onClose={() => setIsLoginOpen(false)} />
+    )}
+    </>
   );
 };
 
